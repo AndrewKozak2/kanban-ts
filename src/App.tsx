@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { type Task } from "./types/todo";
-import { Column } from "./components/Column";
+import { type Priority } from "./types/todo";
+import { Column } from "./components/Column/Column";
 
 import "./App.css";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
+  const [priority, setPriority] = useState<Priority>("low");
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
@@ -19,9 +21,16 @@ function App() {
       id: crypto.randomUUID(),
       title: inputValue,
       status: "todo",
+      priority: priority,
+      createdAt: new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
     };
     setTasks([...tasks, newTask]);
     setInputValue("");
+    setPriority("low");
   }
 
   function handleStatusChange(id: string, newStatus: Task["status"]) {
@@ -34,28 +43,39 @@ function App() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={inputValue} onChange={handleChange} />
+      <form onSubmit={handleSubmit} className="add-task-form">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleChange}
+          placeholder="Введіть задачу..."
+        />
+        <select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value as Priority)}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
         <button>Add</button>
       </form>
       <div className="kanban-board">
-        <div className="kanban-column">
-          <Column
-            title="To Do"
-            tasks={tasks.filter((t) => t.status === "todo")}
-            onStatusChange={handleStatusChange}
-          />
-          <Column
-            title="In Progress"
-            tasks={tasks.filter((t) => t.status === "in-progress")}
-            onStatusChange={handleStatusChange}
-          />
-          <Column
-            title="Done"
-            tasks={tasks.filter((t) => t.status === "done")}
-            onStatusChange={handleStatusChange}
-          />
-        </div>
+        <Column
+          title="To Do"
+          tasks={tasks.filter((t) => t.status === "todo")}
+          onStatusChange={handleStatusChange}
+        />
+        <Column
+          title="In Progress"
+          tasks={tasks.filter((t) => t.status === "in-progress")}
+          onStatusChange={handleStatusChange}
+        />
+        <Column
+          title="Done"
+          tasks={tasks.filter((t) => t.status === "done")}
+          onStatusChange={handleStatusChange}
+        />
       </div>
     </div>
   );
