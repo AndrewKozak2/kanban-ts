@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { type Task } from "./types/todo";
+import { Column } from "./components/Column";
 
 import "./App.css";
 
@@ -22,17 +23,40 @@ function App() {
     setTasks([...tasks, newTask]);
     setInputValue("");
   }
+
+  function handleStatusChange(id: string, newStatus: Task["status"]) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, status: newStatus } : task,
+      ),
+    );
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <input type="text" value={inputValue} onChange={handleChange} />
         <button>Add</button>
       </form>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>{task.title}</li>
-        ))}
-      </ul>
+      <div className="kanban-board">
+        <div className="kanban-column">
+          <Column
+            title="To Do"
+            tasks={tasks.filter((t) => t.status === "todo")}
+            onStatusChange={handleStatusChange}
+          />
+          <Column
+            title="In Progress"
+            tasks={tasks.filter((t) => t.status === "in-progress")}
+            onStatusChange={handleStatusChange}
+          />
+          <Column
+            title="Done"
+            tasks={tasks.filter((t) => t.status === "done")}
+            onStatusChange={handleStatusChange}
+          />
+        </div>
+      </div>
     </div>
   );
 }
