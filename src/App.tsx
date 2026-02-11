@@ -49,6 +49,14 @@ function App() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   }
 
+  function updateTask(id: string, newTitle: string) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, title: newTitle } : task,
+      ),
+    );
+  }
+
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -79,6 +87,7 @@ function App() {
           tasks={tasks.filter((t) => t.status === "todo")}
           onStatusChange={handleStatusChange}
           onDelete={handleDelete}
+          onUpdate={updateTask}
         />
         <Column
           title="In Progress"
@@ -86,6 +95,7 @@ function App() {
           tasks={tasks.filter((t) => t.status === "in-progress")}
           onStatusChange={handleStatusChange}
           onDelete={handleDelete}
+          onUpdate={updateTask}
         />
         <Column
           title="Done"
@@ -93,6 +103,7 @@ function App() {
           tasks={tasks.filter((t) => t.status === "done")}
           onStatusChange={handleStatusChange}
           onDelete={handleDelete}
+          onUpdate={updateTask}
         />
       </div>
     </div>

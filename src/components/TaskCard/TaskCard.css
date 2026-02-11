@@ -1,0 +1,114 @@
+.task-card {
+  background-color: #fff;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #e0e0e0;
+}
+
+.task-card select {
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.task-card select:hover {
+  background-color: #eee;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  line-heignt: 1.4;
+  color: #333;
+}
+
+.edit-input {
+  width: 100%;
+  border-radius: 4px;
+  border: 2px solid #646cff;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 500;
+  color: inherit;
+  outline: none;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.delete-btn {
+  backgroung: transparent;
+  border: none;
+  color: #a0a0a0;
+  corsor: pointer;
+  font-size: 1.25rem;
+  line-height: 0.7;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #c72629;
+  background-color: #f2c3c3;
+}
+
+.priority-low {
+  color: #275728;
+  background-color: #91ff5b;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+.priority-medium {
+  color: #835115;
+  background-color: #ffc457;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+.priority-high {
+  color: #570d0d;
+  background-color: #ff4545;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.task-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.task-date {
+  color: #888;
+}
+
+.status-select {
+  margin-top: 0.75rem;
+  width: 100%;
+}

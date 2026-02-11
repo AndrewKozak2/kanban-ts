@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { TaskCard } from "../TaskCard/TaskCard";
 import { type Task } from "../../types/todo";
-import { type Priority } from "../../types/todo";
+
 import "./Column.css";
 
 type ColumnProps = {
@@ -9,12 +10,7 @@ type ColumnProps = {
   tasks: Task[];
   onStatusChange: (id: string, newStatus: Task["status"]) => void;
   onDelete: (id: string) => void;
-};
-
-const PRIORITY_CLASSES: Record<Priority, string> = {
-  low: "priority-low",
-  medium: "priority-medium",
-  high: "priority-high",
+  onUpdate: (id: string, newTitle: string) => void;
 };
 
 export const Column = ({
@@ -22,13 +18,10 @@ export const Column = ({
   tasks,
   onStatusChange,
   onDelete,
+  onUpdate,
   status,
 }: ColumnProps) => {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
-
-  function handleDragStart(e: React.DragEvent<HTMLDivElement>, id: string) {
-    e.dataTransfer.setData("taskId", id);
-  }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -57,42 +50,13 @@ export const Column = ({
     >
       <h2> {title}</h2>
       {tasks.map((task) => (
-        <div
+        <TaskCard
           key={task.id}
-          className="task-card"
-          draggable={true}
-          onDragStart={(e) => handleDragStart(e, task.id)}
-        >
-          <div className="task-header">
-            <h3>{task.title}</h3>
-            <button
-              className="delete-btn"
-              onClick={() => onDelete(task.id)}
-              aria-label="Delete task"
-            >
-              ×
-            </button>
-          </div>
-
-          <div className="task-meta">
-            <span className={PRIORITY_CLASSES[task.priority]}>
-              {task.priority}
-            </span>
-            <span className="task-date">{task.createdAt}</span>
-          </div>
-
-          <select
-            onChange={(e) =>
-              onStatusChange(task.id, e.target.value as Task["status"])
-            }
-            value={task.status}
-            className="status-select"
-          >
-            <option value="todo">To Do</option>
-            <option value="in-progress">In Progress</option>
-            <option value="done">Done</option>
-          </select>
-        </div>
+          task={task}
+          onStatusChange={onStatusChange}
+          onDelete={onDelete}
+          onUpdate={onUpdate}
+        />
       ))}
     </div>
   );
