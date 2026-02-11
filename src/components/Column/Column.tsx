@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { type Task } from "../../types/todo";
 import { type Priority } from "../../types/todo";
 import "./Column.css";
@@ -23,12 +24,19 @@ export const Column = ({
   onDelete,
   status,
 }: ColumnProps) => {
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+
   function handleDragStart(e: React.DragEvent<HTMLDivElement>, id: string) {
     e.dataTransfer.setData("taskId", id);
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
+    setIsDraggingOver(true);
+  }
+
+  function handleDragLeave() {
+    setIsDraggingOver(false);
   }
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
@@ -36,11 +44,17 @@ export const Column = ({
     const taskId = e.dataTransfer.getData("taskId");
     if (taskId) {
       onStatusChange(taskId, status);
+      setIsDraggingOver(false);
     }
   }
 
   return (
-    <div className="column" onDragOver={handleDragOver} onDrop={handleDrop}>
+    <div
+      className={isDraggingOver ? "column drag-over" : "column"}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragLeave={handleDragLeave}
+    >
       <h2> {title}</h2>
       {tasks.map((task) => (
         <div
