@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type Task } from "./types/todo";
 import { type Priority } from "./types/todo";
 import { Column } from "./components/Column/Column";
@@ -6,7 +6,11 @@ import { Column } from "./components/Column/Column";
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+
   const [inputValue, setInputValue] = useState<string>("");
   const [priority, setPriority] = useState<Priority>("low");
 
@@ -41,6 +45,14 @@ function App() {
     );
   }
 
+  function handleDelete(id: string) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   return (
     <div>
       <form onSubmit={handleSubmit} className="add-task-form">
@@ -65,16 +77,19 @@ function App() {
           title="To Do"
           tasks={tasks.filter((t) => t.status === "todo")}
           onStatusChange={handleStatusChange}
+          onDelete={handleDelete}
         />
         <Column
           title="In Progress"
           tasks={tasks.filter((t) => t.status === "in-progress")}
           onStatusChange={handleStatusChange}
+          onDelete={handleDelete}
         />
         <Column
           title="Done"
           tasks={tasks.filter((t) => t.status === "done")}
           onStatusChange={handleStatusChange}
+          onDelete={handleDelete}
         />
       </div>
     </div>

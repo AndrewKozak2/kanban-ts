@@ -6,6 +6,7 @@ type ColumnProps = {
   title: string;
   tasks: Task[];
   onStatusChange: (id: string, newStatus: Task["status"]) => void;
+  onDelete: (id: string) => void;
 };
 
 const PRIORITY_CLASSES: Record<Priority, string> = {
@@ -14,15 +15,26 @@ const PRIORITY_CLASSES: Record<Priority, string> = {
   high: "priority-high",
 };
 
-export const Column = ({ title, tasks, onStatusChange }: ColumnProps) => {
+export const Column = ({
+  title,
+  tasks,
+  onStatusChange,
+  onDelete,
+}: ColumnProps) => {
   return (
     <div className="column">
       <h2> {title}</h2>
       {tasks.map((task) => (
         <div key={task.id} className="task-card">
           <div className="task-header">
-            {" "}
             <h3>{task.title}</h3>
+            <button
+              className="delete-btn"
+              onClick={() => onDelete(task.id)}
+              aria-label="Delete task"
+            >
+              ×
+            </button>
           </div>
 
           <div className="task-meta">
