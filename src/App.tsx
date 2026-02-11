@@ -75,18 +75,21 @@ function App() {
       <div className="kanban-board">
         <Column
           title="To Do"
+          status="todo"
           tasks={tasks.filter((t) => t.status === "todo")}
           onStatusChange={handleStatusChange}
           onDelete={handleDelete}
         />
         <Column
           title="In Progress"
+          status="in-progress"
           tasks={tasks.filter((t) => t.status === "in-progress")}
           onStatusChange={handleStatusChange}
           onDelete={handleDelete}
         />
         <Column
           title="Done"
+          status="done"
           tasks={tasks.filter((t) => t.status === "done")}
           onStatusChange={handleStatusChange}
           onDelete={handleDelete}

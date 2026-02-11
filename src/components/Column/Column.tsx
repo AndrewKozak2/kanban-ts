@@ -4,6 +4,7 @@ import "./Column.css";
 
 type ColumnProps = {
   title: string;
+  status: Task["status"];
   tasks: Task[];
   onStatusChange: (id: string, newStatus: Task["status"]) => void;
   onDelete: (id: string) => void;
@@ -20,12 +21,34 @@ export const Column = ({
   tasks,
   onStatusChange,
   onDelete,
+  status,
 }: ColumnProps) => {
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>, id: string) {
+    e.dataTransfer.setData("taskId", id);
+  }
+
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("taskId");
+    if (taskId) {
+      onStatusChange(taskId, status);
+    }
+  }
+
   return (
-    <div className="column">
+    <div className="column" onDragOver={handleDragOver} onDrop={handleDrop}>
       <h2> {title}</h2>
       {tasks.map((task) => (
-        <div key={task.id} className="task-card">
+        <div
+          key={task.id}
+          className="task-card"
+          draggable={true}
+          onDragStart={(e) => handleDragStart(e, task.id)}
+        >
           <div className="task-header">
             <h3>{task.title}</h3>
             <button
