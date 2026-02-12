@@ -1,15 +1,12 @@
-import { useState, useEffect } from "react";
-import { type Task } from "./types/todo";
+import { useState } from "react";
 import { type Priority } from "./types/todo";
 import { Column } from "./components/Column/Column";
+import { useTasks} from "./components/hooks/useTasks";
 
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
+  const {tasks, addTask, deleteTask, changeStatus, updateTask} = useTasks();
 
   const [inputValue, setInputValue] = useState<string>("");
   const [priority, setPriority] = useState<Priority>("low");
@@ -21,45 +18,11 @@ function App() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!inputValue.trim()) return;
-    const newTask: Task = {
-      id: crypto.randomUUID(),
-      title: inputValue,
-      status: "todo",
-      priority: priority,
-      createdAt: new Date().toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
-    };
-    setTasks([...tasks, newTask]);
+
+    addTask(inputValue, priority);
     setInputValue("");
     setPriority("low");
   }
-
-  function handleStatusChange(id: string, newStatus: Task["status"]) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, status: newStatus } : task,
-      ),
-    );
-  }
-
-  function handleDelete(id: string) {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  }
-
-  function updateTask(id: string, newTitle: string) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, title: newTitle } : task,
-      ),
-    );
-  }
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
 
   return (
     <div>
@@ -85,24 +48,24 @@ function App() {
           title="To Do"
           status="todo"
           tasks={tasks.filter((t) => t.status === "todo")}
-          onStatusChange={handleStatusChange}
-          onDelete={handleDelete}
+          onStatusChange={changeStatus}
+          onDelete={deleteTask}
           onUpdate={updateTask}
         />
         <Column
           title="In Progress"
           status="in-progress"
           tasks={tasks.filter((t) => t.status === "in-progress")}
-          onStatusChange={handleStatusChange}
-          onDelete={handleDelete}
+          onStatusChange={changeStatus}
+          onDelete={deleteTask}
           onUpdate={updateTask}
         />
         <Column
           title="Done"
           status="done"
           tasks={tasks.filter((t) => t.status === "done")}
-          onStatusChange={handleStatusChange}
-          onDelete={handleDelete}
+          onStatusChange={changeStatus}
+          onDelete={deleteTask}
           onUpdate={updateTask}
         />
       </div>
