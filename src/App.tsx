@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { type Priority } from "./types/todo";
 import { Column } from "./components/Column/Column";
-import { useTasks} from "./components/hooks/useTasks";
+import { useTasks } from "./components/hooks/useTasks";
 
 import "./App.css";
 
 function App() {
-  const {tasks, addTask, deleteTask, changeStatus, updateTask} = useTasks();
+  const { tasks, addTask, deleteTask, changeStatus, updateTask } = useTasks();
 
   const [inputValue, setInputValue] = useState<string>("");
   const [priority, setPriority] = useState<Priority>("low");

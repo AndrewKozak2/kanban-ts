@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Trash2, Pencil } from "lucide-react";
 import { type Task } from "../../types/todo";
 import { type Priority } from "../../types/todo";
 import "./TaskCard.css";
@@ -31,7 +32,7 @@ export const TaskCard = ({
   return (
     <div
       className="task-card"
-      draggable={true}
+      draggable={!isEditing}
       onDragStart={(e) => handleDragStart(e, task.id)}
     >
       <div className="task-header">
@@ -44,19 +45,38 @@ export const TaskCard = ({
               setIsEditing(false);
               onUpdate(task.id, editedTitle);
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setIsEditing(false);
+                onUpdate(task.id, editedTitle);
+              }
+            }}
             className="edit-input"
           />
         ) : (
-          <h3 onClick={() => setIsEditing(true)}>{task.title}</h3>
+          <h3 onClick={() => setIsEditing(true)} style={{ flexGrow: 1 }}>
+            {task.title}
+          </h3>
         )}
+        <div className="action-buttons">
+          {!isEditing && (
+            <button
+              className="icon-btn edit-btn"
+              onClick={() => setIsEditing(true)}
+              aria-label="Edit task"
+            >
+              <Pencil size={18} />
+            </button>
+          )}
 
-        <button
-          className="delete-btn"
-          onClick={() => onDelete(task.id)}
-          aria-label="Delete task"
-        >
-          ×
-        </button>
+          <button
+            className="icon-btn delete-btn"
+            onClick={() => onDelete(task.id)}
+            aria-label="Delete task"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
       </div>
       <div className="task-meta">
         <span className={PRIORITY_CLASSES[task.priority]}>{task.priority}</span>

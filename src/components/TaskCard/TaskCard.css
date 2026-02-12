@@ -34,21 +34,62 @@
 .task-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
+  min-height: 1.75rem;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: #a0a0a0;
+}
+
+.edit-btn {
+  background: transparent;
+  border: none;
+  color: #a0a0a0;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 0.7;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+  color: #646cff;
+  background-color: #eef2ff;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
 .task-header h3 {
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
-  line-heignt: 1.4;
+  line-height: 1.4;
+  text-align: left;
   color: #333;
+  overflow-wrap: anywhere;
 }
 
 .edit-input {
-  width: 100%;
+  flex-grow: 1;
+  width: auto;
+  min-width: 0;
   border-radius: 4px;
   border: 2px solid #646cff;
   font-size: inherit;
@@ -61,10 +102,10 @@
 }
 
 .delete-btn {
-  backgroung: transparent;
+  background: transparent;
   border: none;
   color: #a0a0a0;
-  corsor: pointer;
+  cursor: pointer;
   font-size: 1.25rem;
   line-height: 0.7;
   padding: 0.25rem 0.5rem;
