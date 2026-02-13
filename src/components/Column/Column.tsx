@@ -48,7 +48,10 @@ export const Column = ({
       onDrop={handleDrop}
       onDragLeave={handleDragLeave}
     >
-      <h2> {title}</h2>
+      <h2>
+        {title}
+        <span className="task-count">{tasks.length}</span>
+      </h2>
       {tasks.map((task) => (
         <TaskCard
           key={task.id}
