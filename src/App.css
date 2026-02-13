@@ -3,6 +3,8 @@
   --bg-column: #ffffff;
   --bg-card: #ffffff;
   --bg-input: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-drag-over: #f8fafc;
   --text-main: #0f172a;
   --text-muted: #475569;
   --primary: #4f46e5;
@@ -13,6 +15,31 @@
     0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --badge-low-bg: #d1fae5;
+  --badge-low-text: #065f46;
+  --badge-med-bg: #fef3c7;
+  --badge-med-text: #92400e;
+  --badge-high-bg: #fee2e2;
+  --badge-high-text: #991b1b;
+}
+
+[data-theme="dark"] {
+  --bg-body: #0b1120;
+  --bg-column: #1e293b;
+  --bg-card: #334155;
+  --bg-input: #0f172a;
+  --bg-hover: #475569;
+  --bg-drag-over: #0f172a;
+  --text-main: #f8fafc;
+  --text-muted: #8e9bab;
+  --border-light: #475569;
+  --shadow-column: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --badge-low-bg: rgba(52, 211, 153, 0.15);
+  --badge-low-text: #34d399;
+  --badge-med-bg: rgba(251, 191, 36, 0.15);
+  --badge-med-text: #fbbf24;
+  --badge-high-bg: rgba(248, 113, 113, 0.15);
+  --badge-high-text: #f87171;
 }
 
 *,
@@ -38,6 +65,30 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: 2rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto 1rem auto;
+  padding: 0 1rem;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: var(--primary);
 }
 
 .add-task-form {

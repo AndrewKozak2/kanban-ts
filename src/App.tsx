@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type Priority } from "./types/todo";
 import { Column } from "./components/Column/Column";
 import {
@@ -6,6 +6,7 @@ import {
   type SelectOption,
 } from "./components/CustomSelect/CustomSelect";
 import { useTasks } from "./components/hooks/useTasks";
+import { Sun, Moon } from "lucide-react";
 
 import "./App.css";
 
@@ -20,6 +21,10 @@ function App() {
 
   const [inputValue, setInputValue] = useState<string>("");
   const [priority, setPriority] = useState<Priority>("low");
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    return savedTheme ? savedTheme : "light";
+  });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
@@ -34,8 +39,22 @@ function App() {
     setPriority("low");
   }
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  }
+
   return (
     <div>
+      <header className="app-header">
+        <button onClick={toggleTheme} className="icon-btn">
+          {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
+        </button>
+      </header>
       <form onSubmit={handleSubmit} className="add-task-form">
         <input
           type="text"
