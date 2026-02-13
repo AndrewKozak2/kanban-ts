@@ -1,21 +1,21 @@
 import { useState } from "react";
-import { Trash2, Pencil } from "lucide-react";
+import { Trash2, Pencil, Check } from "lucide-react";
 import { type Task } from "../../types/todo";
-import { type Priority } from "../../types/todo";
+import { CustomSelect, type SelectOption } from "../CustomSelect/CustomSelect";
 import "./TaskCard.css";
 
 type TaskCardProps = {
   task: Task;
-  onStatusChange: (id: string, newStatus: Task["status"]) => void;
   onDelete: (id: string) => void;
+  onStatusChange: (id: string, newStatus: Task["status"]) => void;
   onUpdate: (id: string, newTitle: string) => void;
 };
 
-const PRIORITY_CLASSES: Record<Priority, string> = {
-  low: "priority-low",
-  medium: "priority-medium",
-  high: "priority-high",
-};
+const STATUS_OPTIONS: SelectOption<Task["status"]>[] = [
+  { value: "todo", label: "To Do" },
+  { value: "in-progress", label: "In Progress" },
+  { value: "done", label: "Done" },
+];
 
 export const TaskCard = ({
   task,
@@ -23,11 +23,22 @@ export const TaskCard = ({
   onDelete,
   onUpdate,
 }: TaskCardProps) => {
-  function handleDragStart(e: React.DragEvent<HTMLDivElement>, id: string) {
-    e.dataTransfer.setData("taskId", id);
-  }
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
+
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string) => {
+    e.dataTransfer.setData("taskId", id);
+  };
+
+  const handleSave = () => {
+    if (editedTitle.trim().length === 0) {
+      setEditedTitle(task.title);
+      setIsEditing(false);
+      return;
+    }
+    onUpdate(task.id, editedTitle);
+    setIsEditing(false);
+  };
 
   return (
     <div
@@ -37,27 +48,30 @@ export const TaskCard = ({
     >
       <div className="task-header">
         {isEditing ? (
-          <input
-            value={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-            autoFocus
-            onBlur={() => {
-              setIsEditing(false);
-              onUpdate(task.id, editedTitle);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setIsEditing(false);
-                onUpdate(task.id, editedTitle);
-              }
-            }}
-            className="edit-input"
-          />
+          <div className="edit-mode-wrapper">
+            <input
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              autoFocus
+              onBlur={handleSave}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSave();
+              }}
+              className="edit-input"
+            />
+            <button
+              className="icon-btn save-btn"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleSave}
+              aria-label="Save changes"
+            >
+              <Check size={18} />
+            </button>
+          </div>
         ) : (
-          <h3 onClick={() => setIsEditing(true)} style={{ flexGrow: 1 }}>
-            {task.title}
-          </h3>
+          <h3 onClick={() => setIsEditing(true)}>{task.title}</h3>
         )}
+
         <div className="action-buttons">
           {!isEditing && (
             <button
@@ -65,35 +79,29 @@ export const TaskCard = ({
               onClick={() => setIsEditing(true)}
               aria-label="Edit task"
             >
-              <Pencil size={18} />
+              <Pencil size={16} />
             </button>
           )}
-
           <button
             className="icon-btn delete-btn"
             onClick={() => onDelete(task.id)}
             aria-label="Delete task"
           >
-            <Trash2 size={18} />
+            <Trash2 size={16} />
           </button>
         </div>
       </div>
+
       <div className="task-meta">
-        <span className={PRIORITY_CLASSES[task.priority]}>{task.priority}</span>
         <span className="task-date">{task.createdAt}</span>
+        <span className={`priority-${task.priority}`}>{task.priority}</span>
       </div>
 
-      <select
-        onChange={(e) =>
-          onStatusChange(task.id, e.target.value as Task["status"])
-        }
+      <CustomSelect
         value={task.status}
-        className="status-select"
-      >
-        <option value="todo">To Do</option>
-        <option value="in-progress">In Progress</option>
-        <option value="done">Done</option>
-      </select>
+        options={STATUS_OPTIONS}
+        onChange={(newStatus) => onStatusChange(task.id, newStatus)}
+      />
     </div>
   );
 };

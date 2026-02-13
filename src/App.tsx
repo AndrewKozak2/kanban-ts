@@ -1,9 +1,19 @@
 import { useState } from "react";
 import { type Priority } from "./types/todo";
 import { Column } from "./components/Column/Column";
+import {
+  CustomSelect,
+  type SelectOption,
+} from "./components/CustomSelect/CustomSelect";
 import { useTasks } from "./components/hooks/useTasks";
 
 import "./App.css";
+
+const PRIORITY_OPTIONS: SelectOption<Priority>[] = [
+  { value: "low", label: "Low" },
+  { value: "medium", label: "Medium" },
+  { value: "high", label: "High" },
+];
 
 function App() {
   const { tasks, addTask, deleteTask, changeStatus, updateTask } = useTasks();
@@ -33,14 +43,11 @@ function App() {
           onChange={handleChange}
           placeholder="Введіть задачу..."
         />
-        <select
+        <CustomSelect
           value={priority}
-          onChange={(e) => setPriority(e.target.value as Priority)}
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+          options={PRIORITY_OPTIONS}
+          onChange={setPriority}
+        />
         <button>Add</button>
       </form>
       <div className="kanban-board">

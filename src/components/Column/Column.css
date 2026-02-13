@@ -1,17 +1,36 @@
 .column {
-  flex: 1;
-  background-color: #f4f5f7;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-  border: 2px solid transparent;
+  flex: 0 0 320px;
+  background-color: var(--bg-column);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.2s ease;
+  scroll-snap-align: start;
+  box-shadow: var(--shadow-column);
+  border: 1px solid var(--border-light);
+}
+
+.column h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
 }
 
 .column.drag-over {
-  background-color: #e3e5e8;
-  border: 2px dashed #646cff;
+  background-color: #f8fafc;
+  box-shadow: inset 0 0 0 2px var(--primary);
+  border-color: var(--primary);
 }
 
-
+@media (max-width: 768px) {
+  .column {
+    flex: 0 0 85vw;
+    min-width: 85vw;
+  }
+}

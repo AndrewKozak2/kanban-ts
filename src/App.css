@@ -1,77 +1,119 @@
+:root {
+  --bg-body: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  --bg-column: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --danger: #ef4444;
+  --border-light: #cbd5e1;
+  --shadow-column:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-body);
+  min-height: 100vh;
+  color: var(--text-main);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+}
+
+.add-task-form {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 2.5rem auto;
+  padding: 0 1rem;
+}
+
+.add-task-form input,
+.add-task-form select {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  outline: none;
+}
+.add-task-form input {
+  flex: 1;
+}
+.add-task-form select {
+  width: 140px;
+  cursor: pointer;
+}
+.add-task-form input:focus,
+.add-task-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+.add-task-form button {
+  padding: 0 1.5rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.add-task-form button:hover {
+  background-color: var(--primary-hover);
+}
+.add-task-form button:active {
+  transform: scale(0.97);
 }
 
 .kanban-board {
   display: flex;
   gap: 1.5rem;
-  padding-top: 2rem;
-  justify-content: center;
   align-items: flex-start;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 1rem;
+  scrollbar-width: none;
+}
+.kanban-board::-webkit-scrollbar {
+  display: none;
 }
 
-.add-task-form {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.add-task-form input {
-  flex: 1;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-  outline: none;
-}
-
-.add-task-form input:focus {
-  border-color: var(--primary-color);
-}
-
-.add-task-form button {
-  padding: 0 1.5rem;
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s transform 0.1s;
-}
-
-.add-task-form button:hover {
-  background-color: #535bf2;
-}
-
-.add-task-form button:active {
-  transform: scale(0.95);
-}
-
-.add-task-form input,
-.add-task-form select {
-  flex: 1;
-  padding: 0.8rem;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
-  background-color: white;
-  transition: border-color 0.2s;
-  cursor: pointer;
-}
-
-.add-task-form input:focus,
-.add-task-form select:focus {
-  border-color: #646cff;
-}
-.add-task-form select {
-  flex: 0 0 150px;
+@media (max-width: 640px) {
+  .add-task-form {
+    flex-direction: column;
+  }
+  .add-task-form select,
+  .add-task-form button {
+    width: 100%;
+    height: 48px;
+  }
 }
