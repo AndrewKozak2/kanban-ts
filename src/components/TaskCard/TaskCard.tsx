@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { Trash2, Pencil, Check } from "lucide-react";
 import { type Task } from "../../types/todo";
 import { CustomSelect, type SelectOption } from "../CustomSelect/CustomSelect";
@@ -25,6 +25,7 @@ export const TaskCard = ({
 }: TaskCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string) => {
     e.dataTransfer.setData("taskId", id);
@@ -40,6 +41,13 @@ export const TaskCard = ({
     setIsEditing(false);
   };
 
+  useLayoutEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`;
+    }
+  }, [editedTitle, isEditing]);
+
   return (
     <div
       className="task-card"
@@ -49,7 +57,8 @@ export const TaskCard = ({
       <div className="task-header">
         {isEditing ? (
           <div className="edit-mode-wrapper">
-            <input
+            <textarea
+              ref={textareaRef}
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
               autoFocus

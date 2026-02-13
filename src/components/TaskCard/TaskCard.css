@@ -27,8 +27,7 @@
 .task-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-start;
   min-height: 32px;
 }
 
@@ -46,7 +45,7 @@
 .edit-input {
   flex-grow: 1;
   min-width: 0;
-  padding: 0.2rem 0.5rem;
+  padding: 0.25rem;
   width: 100%;
   font-size: 0.95rem;
   font-family: inherit;
@@ -58,18 +57,15 @@
   background-color: var(--bg-body);
   outline: none;
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+  resize: none;
+  overflow: hidden;
 }
 
 .action-buttons {
   display: flex;
-  gap: 0.25rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  gap: 0.2rem;
   align-items: center;
-}
-
-.task-card:hover .action-buttons {
-  opacity: 1;
+  margin-top: 0.1rem;
 }
 
 .icon-btn {
@@ -85,12 +81,12 @@
   transition: all 0.2s ease;
 }
 
-.edit-btn:hover {
+.icon-btn.edit-btn:hover {
   color: var(--primary);
   background-color: rgba(79, 70, 229, 0.1);
 }
 
-.delete-btn:hover {
+.icon-btn.delete-btn:hover {
   color: var(--danger);
   background-color: rgba(239, 68, 68, 0.1);
 }
@@ -152,7 +148,7 @@
 
 .edit-mode-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
   flex-grow: 1;
 }
@@ -164,10 +160,4 @@
 .save-btn:hover {
   background-color: rgba(79, 70, 229, 0.1);
   color: var(--primary-hover);
-}
-
-@media (hover: none) {
-  .action-buttons {
-    opacity: 1;
-  }
 }
