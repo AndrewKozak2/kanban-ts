@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { type Priority } from "./types/todo";
 import { Column } from "./components/Column/Column";
 import {
@@ -25,6 +25,12 @@ function App() {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
     return savedTheme ? savedTheme : "light";
   });
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) =>
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [tasks, searchQuery]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
@@ -51,9 +57,23 @@ function App() {
   return (
     <div>
       <header className="app-header">
-        <button onClick={toggleTheme} className="icon-btn">
-          {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
-        </button>
+        <div className="header-title">Kanban Board</div>
+        <div className="header-controls">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Пошук задач..."
+            className="search-input"
+          />
+          <button
+            onClick={toggleTheme}
+            className="icon-btn theme-toggle-btn"
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? <Moon size={22} /> : <Sun size={22} />}
+          </button>
+        </div>
       </header>
       <form onSubmit={handleSubmit} className="add-task-form">
         <input
@@ -73,7 +93,7 @@ function App() {
         <Column
           title="To Do"
           status="todo"
-          tasks={tasks.filter((t) => t.status === "todo")}
+          tasks={filteredTasks.filter((t) => t.status === "todo")}
           onStatusChange={changeStatus}
           onDelete={deleteTask}
           onUpdate={updateTask}
@@ -81,7 +101,7 @@ function App() {
         <Column
           title="In Progress"
           status="in-progress"
-          tasks={tasks.filter((t) => t.status === "in-progress")}
+          tasks={filteredTasks.filter((t) => t.status === "in-progress")}
           onStatusChange={changeStatus}
           onDelete={deleteTask}
           onUpdate={updateTask}
@@ -89,7 +109,7 @@ function App() {
         <Column
           title="Done"
           status="done"
-          tasks={tasks.filter((t) => t.status === "done")}
+          tasks={filteredTasks.filter((t) => t.status === "done")}
           onStatusChange={changeStatus}
           onDelete={deleteTask}
           onUpdate={updateTask}

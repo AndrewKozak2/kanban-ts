@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { createPortal } from "react-dom"; // 1. Імпортуємо портал
+import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 import "./CustomSelect.css";
 
@@ -20,17 +20,14 @@ export const CustomSelect = <T extends string>({
   onChange,
 }: CustomSelectProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
-  // Стан для збереження координат кнопки
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Функція відкриття/закриття з вирахуванням координат
   const toggle = () => {
     if (!isOpen && containerRef.current) {
-      // Отримуємо розміри та позицію кнопки на екрані
       const rect = containerRef.current.getBoundingClientRect();
       setCoords({
-        top: rect.bottom + window.scrollY + 4, // 4px відступ вниз
+        top: rect.bottom + window.scrollY + 4,
         left: rect.left + window.scrollX,
         width: rect.width,
       });
@@ -38,13 +35,11 @@ export const CustomSelect = <T extends string>({
     setIsOpen(!isOpen);
   };
 
-  // Закриття при кліку зовні (оновлена логіка для порталу)
   useEffect(() => {
     if (!isOpen) return;
 
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
-      // Перевіряємо, чи клік був НЕ по кнопці і НЕ по випадаючому списку
       const dropdownElement = document.querySelector(".custom-select-dropdown");
       if (
         containerRef.current &&
@@ -56,9 +51,7 @@ export const CustomSelect = <T extends string>({
       }
     }
 
-    // Додаємо слухач з { capture: true } для надійнішого перехоплення подій
     document.addEventListener("click", handleClickOutside, { capture: true });
-    // Також закриваємо при скролі сторінки, щоб список не "відлітав"
     window.addEventListener("scroll", () => setIsOpen(false), {
       capture: true,
     });
@@ -75,13 +68,11 @@ export const CustomSelect = <T extends string>({
 
   const currentLabel = options.find((opt) => opt.value === value)?.label;
 
-  // JSX випадаючого списку
   const dropdownMenu = (
     <div
       className="custom-select-dropdown"
-      // Задаємо позицію динамічно через стилі
       style={{
-        position: "fixed", // Тепер він фіксований відносно вікна
+        position: "fixed",
         top: coords.top,
         left: coords.left,
         width: coords.width,
@@ -92,7 +83,7 @@ export const CustomSelect = <T extends string>({
           key={opt.value}
           className={`custom-select-option ${value === opt.value ? "selected" : ""}`}
           onClick={(e) => {
-            e.stopPropagation(); // Зупиняємо спливання події
+            e.stopPropagation();
             onChange(opt.value);
             setIsOpen(false);
           }}
@@ -115,8 +106,6 @@ export const CustomSelect = <T extends string>({
           className={`select-arrow ${isOpen ? "open" : ""}`}
         />
       </div>
-
-      {/* Рендеримо список через Портал прямо в body */}
       {isOpen && createPortal(dropdownMenu, document.body)}
     </div>
   );
