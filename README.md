@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# Kanban Board — React + TypeScript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Сучасний та продуктивний менеджер завдань, побудований на архітектурі **React** із використанням **TypeScript**. Проєкт демонструє роботу з нативним **Drag & Drop API**, оптимізацію рендеру через мемоізацію та глибоку роботу з життєвим циклом компонентів.
 
-Currently, two official plugins are available:
+Live Demo: https://kanban-ts-three.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##  Технічний стек
 
-## React Compiler
+* **Frontend:** React 18, TypeScript, Vite.
+* **Керування станом:** React Hooks (`useState`, `useEffect`, `useRef`).
+* **Оптимізація:** `useMemo` для фільтрації, `useLayoutEffect` для DOM-маніпуляцій.
+* **Стилізація:** CSS Modules / CSS Variables (підтримка темної та світлої тем).
+* **Інфраструктура:** CI/CD через Vercel.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+##  Ключові особливості та реалізація
 
-## Expanding the ESLint configuration
+### 1. Оптимізований пошук (Derived State)
+Замість фільтрації масиву при кожному рендері, реалізовано обчислюваний стан за допомогою `useMemo`. Це дозволяє уникати важких операцій O(N) при зміні теми або інших станів, що не стосуються пошуку.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 2. Нативний Drag & Drop
+Реалізовано перетягування карток між колонками за допомогою нативного **HTML5 Drag & Drop API** (`dataTransfer`). Це демонструє вміння працювати з браузерними API без сторонніх бібліотек.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 3. Розумні форми (Auto-resize Textarea)
+Для покращення UX реалізовано режим редагування, де `textarea` автоматично підлаштовує свою висоту під об'єм тексту. Використано `useLayoutEffect` для синхронного розрахунку `scrollHeight`, що виключає візуальні "стрибки" інтерфейсу.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 4. Персистентність даних
+Стан задач та обрана тема користувача зберігаються у `LocalStorage`. При перезавантаженні сторінки дані залишаються актуальними.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 5. Адаптивність та Clean Code
+* Повністю адаптивний дизайн (від мобільних пристроїв до Wide-екраннів).
+* Типізація всіх пропсів та об'єктів подій через TypeScript.
+* Використання CSS-змінних для легкої підтримки та масштабування дизайну.
+
+## Як запустити локально
+
+1. Клонувати репозиторій:
+```bash
+   git clone https://github.com/AndrewKozak2/kanban-ts.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Встановити залежності:
+```bash
+npm install
+```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. Запустити режим розробки:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
